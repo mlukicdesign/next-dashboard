@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { signIn } from '@/auth';
 
 // The amount field is specifically set to coerce (change) from a string to a number while also validating its type.
 
@@ -90,8 +91,6 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
 
 
-
-
 const UpdateInvoice = InvoiceSchema.omit({ id: true,  date: true });
 
 export async function updateInvoice(
@@ -145,4 +144,22 @@ export async function deleteInvoice(id: string) {
 }
  
   revalidatePath('/dashboard/invoices');
+}
+
+
+
+// connect auth logic with login form
+
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  try {
+    await signIn('credentials', Object.fromEntries(formData));
+  } catch (error) {
+    if ((error as Error).message.includes('CredentialsSignin')) {
+      return 'CredentialsSignin';
+    }
+    throw error;
+  }
 }
