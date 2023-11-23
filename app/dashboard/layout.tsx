@@ -1,4 +1,9 @@
 import SideNav from '@/app/ui/dashboard/sidenav';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Dashboard',
+  };
 
 export default function Layout ({ children }: { children: React.ReactNode}) {
     {/* layout component recieves a children prop. the child can either be a page or another layout. In this case the pages inside /dashboard will automatically be nested inside a Layout component. */}
